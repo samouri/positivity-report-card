@@ -31,7 +31,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitterStrategy({
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
-    callbackURL: "auth/twitter/callback"
+    callbackURL: "http://127.0.0.1/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
     // asynchronous verification, for effect...
@@ -52,7 +52,7 @@ passport.use(new TwitterStrategy({
 
 
 
-var app = express(), server = require('http').createServer(app)
+var app = express(), server = require('http').createServer(app);
 
 // configure Express
 app.configure(function() {
@@ -74,8 +74,24 @@ app.configure(function() {
 
 app.get('/', function(req, res){
     var params = {};
-        
-    if (!req.user) {
+    soap = require('soap');
+    var url = 'https://cilantro.clarabridge.com/cbapi/realtime?wsdl';
+    var args = {name: 'value'};
+    soap.createClient(url, function(err, client) {
+        console.log(JSON.stringify(client.describe(),null,4));
+        client.processMultiVerbatimDocument({
+            processMultiVerbatimDocumentRequest: {
+                    projectName: "API Project One",
+                    responseLevel: 'VERBATIM', 
+                    verbatimSet: {verbatim: "Today is such a super day"}
+            }},
+            function(err, result) {
+                  // result is a javascript object
+                  console.log(JSON.stringify(result,null,4));
+                  console.log(client.lastRequest);
+            })
+    });  
+/*    if (!req.user) {
       // Not logged-in. Authenticate based on Twitter account.
         res.render('signin');
     } else {
@@ -86,7 +102,8 @@ app.get('/', function(req, res){
                  access_token:         req.user.info.access_token, 
                  access_token_secret:  req.user.info.access_token_secret
         });
-    }
+        res.render('logged-in');
+    } */
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){

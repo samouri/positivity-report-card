@@ -31,7 +31,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitterStrategy({
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
-    callbackURL: ""
+    callbackURL: "auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
     // asynchronous verification, for effect...
@@ -53,7 +53,6 @@ passport.use(new TwitterStrategy({
 
 
 var app = express(), server = require('http').createServer(app)
-  , io = require('socket.io').listen(server);
 
 // configure Express
 app.configure(function() {
@@ -85,10 +84,10 @@ app.get('/', function(req, res){
                  consumer_key:         req.user.info.consumer_key, 
                  consumer_secret:      req.user.info.consumer_secret, 
                  access_token:         req.user.info.access_token, 
-                 access_token_secret:  req.user.info.access_token_secret}
-                 );
+                 access_token_secret:  req.user.info.access_token_secret
+        });
     }
-}
+});
 
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });

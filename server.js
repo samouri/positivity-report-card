@@ -4,6 +4,8 @@ var util = require('util');
 var Twit = require('twit');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var async = require("async");
+var request = require('request');
+var parseString = require('xml2js').parseString;
 
 var TWITTER_CONSUMER_KEY = "tz8NWGoSwc8Is0iTdgYfru93l";
 var TWITTER_CONSUMER_SECRET = "Kcl1KJc1UJP4Jifcm6GoJtAfIWL2vkZ3ejD8QqYkQuvvgAX8u8";
@@ -71,41 +73,52 @@ app.configure(function() {
   app.use(express.static(__dirname + '/public'));
 });
 
+var getSentiment = function getSentiment(json) {
+       return json["S:Envelope"]["S:Body"][0]['ns2:processMultiVerbatimDocumentResponse'][0].return[0].degreeSentiment;
+}
+
+var getOtherStuff = function getVerbatim(json) {
+       return "";
+}
+
+var getClar = function getClar(text, verbatimLevel, callback) {
+    var uri = "https://cilantro.clarabridge.com/cbapi/realtime";
+    var verbatim = text;
+    var project_name = "API Project One";
+    var response_level = verbatimLevel;
+    var verbatim_type = "tweet";
+    var data = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:real="http://realtime.cbapi.clarabridge.com/"><soapenv:Header/><soapenv:Body> <real:processMultiVerbatimDocument> <processMultiVerbatimDocumentRequest> <projectName>' + project_name +'</projectName> <responseLevel>'+ response_level +'</responseLevel> <verbatimSet> <verbatim type="'+verbatim_type +'">'+ verbatim +'</verbatim> </verbatimSet> </processMultiVerbatimDocumentRequest> </real:processMultiVerbatimDocument> </soapenv:Body> </soapenv:Envelope>';
+    var method = "POST";
+    var headers = {
+        'Authorization': 'Basic ' + new Buffer('jakefried' + ':' + 'poSitivity!476').toString('base64') 
+    };
+    options = {
+        uri: uri,
+        headers: headers,
+        body: data
+    }
+    var ret;
+    request.post(options, function (error, response, body) {
+        parseString(body, function(err,results) { callback(err, results); });
+    });
+}
 
 app.get('/', function(req, res){
     var params = {};
-    soap = require('soap');
-    var url = 'https://cilantro.clarabridge.com/cbapi/realtime?wsdl';
-    var args = {name: 'value'};
-    soap.createClient(url, function(err, client) {
-        console.log(JSON.stringify(client.describe(),null,4));
-        client.processMultiVerbatimDocument({
-            processMultiVerbatimDocumentRequest: {
-                    projectName: "API Project One",
-                    responseLevel: 'VERBATIM', 
-                    verbatimSet: {verbatim: "Today is such a super day"}
-            }},
-            function(err, result) {
-                  // result is a javascript object
-                  console.log(JSON.stringify(result,null,4));
-                  console.log(client.lastRequest);
-            })
-    });  
-/*    if (!req.user) {
-      // Not logged-in. Authenticate based on Twitter account.
-        res.render('signin');
-    } else {
-      // Logged in. Associate Twitter account with user.
-        var T = new Twit({
-                 consumer_key:         req.user.info.consumer_key, 
-                 consumer_secret:      req.user.info.consumer_secret, 
-                 access_token:         req.user.info.access_token, 
-                 access_token_secret:  req.user.info.access_token_secret
-        });
-        res.render('logged-in');
-    } */
+    res.render('signin', {sentiment: "", text:"", data:""});
 });
 
+app.get('/text', function(req, res){
+    var params = {};
+    var verbatim = req.param('verbatim');
+    getClar(verbatim, "VERBATIM", function(error, data){
+        console.log(data);
+        var sentiment = getSentiment(data);
+        res.render('signin', {sentiment: sentiment, text:verbatim, data:data});
+    });
+});
+
+/*
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
 });
@@ -113,7 +126,7 @@ app.get('/account', ensureAuthenticated, function(req, res){
 app.get('/login', function(req, res){
   res.render('login', { user: req.user });
 });
-
+*/ 
 // GET /auth/twitter
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  The first step in Twitter authentication will involve redirecting

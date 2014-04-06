@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href='http://fonts.googleapis.com/css?family=Montserrat|Open+Sans' rel='stylesheet' type='text/css'>
+<meta charset="utf-8" />
+<title>Positivity Report Card</title>
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/text.css" />
+<link rel="stylesheet" href="css/960.css" />
+<link rel="stylesheet" href="css/demo.css" />
+</head>
+<body>
+<div class="container_12">
+  <div class="grid_12">
+    <p class = "logo"><img src="img/logo.png" class="some_text"></p>
+  </div>
+  <!-- end .grid_12 -->
+  <div class="clear"></div>
+  <div class="grid_12">
+    <form method="get">
+      <input type="text" name="web" placeholder="Twitter Handle" autofocus="true" id="web" />
+    </form>
+  </div>
+  <!-- end .grid_12 -->
+  <div class="clear"></div>
+  <div class="grid_12">
+    <p class = "info">
+      <span class="labels">How positive are you?</span><br/>
+
+      Many of us need to work on improving our outlook on life. This tool will scan the way you talk on social media and email applications and determine how positive you really are. Enter your information above to start! 
+
+      <br/><br/><span class="labels">How does it work?</span><br/>
+
+      Positivity report card is powered by Clarabridge, a natural language processing software that can determine how positive or negative each message is. Our algorithm then calculates your positivity number when it compiles  the data it gathers from your messages.
+      <br/><br/>
+      We won't store any of your information, or analyze it in any other way other than to show you how positive you are. We wouldn't know what to do with it anyways.
+    </p>
+  </div>
+  <!-- end .grid_12 -->
+  <div class="clear"></div>
+  <div class="grid_12">
+    <div style="position: absolute; bottom: 0px;">
+    <p class="copy">
+       <br/> Designed by Jake Fried, Ali Eskandari, and James Wills. April 2014
+    </p>
+    </div>
+  </div>
+  <!-- end .grid_12 -->  
+</body>
+
+<script> 
+    var d = <%- JSON.stringify(twitter_data) %> 
+</script>
+
+</html>

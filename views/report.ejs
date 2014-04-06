@@ -83,6 +83,16 @@ if(sentiment < 10)  {
 </center>
 
 <script> 
+
+
+function getClass(obj) {
+  if (typeof obj === "undefined")
+    return "undefined";
+  if (obj === null)
+    return "null";
+  return Object.prototype.toString.call(obj)
+    .match(/^\[object\s(.*)\]$/)[1];
+}
     var t = <%- JSON.stringify(twitter_data) %>; 
     var d = <%- JSON.stringify(data) %> ;
     var monthNames = [ "January", "February", "March", "April", "May", "June",
@@ -109,13 +119,7 @@ if(sentiment < 10)  {
         }
     };
     $.plot($("#placeholder"), data, options);
-    $("#placeholder").bind("plotclick", function (event, pos, item) {
-        if (item) {
-            console.log(item);
-            $('html, body').animate({scrollTop: $("#" + item.dataIndex).offset().top}, 2000);
-        }
-    });
-    
+
     function showTooltip(x, y, contents) {
         $('<div id="tooltip">' + contents + '</div>').css( {
             position: 'absolute',
@@ -141,8 +145,9 @@ if(sentiment < 10)  {
                 var x = item.datapoint[0].toFixed(2),
                 y = item.datapoint[1].toFixed(2);
 
+                var d = new Date(parseInt(x));
                 showTooltip(item.pageX, item.pageY,
-                item.series.label + " of " + x + " = " + y);
+                d.getMonth()+"/"+d.getDate()+"/"+d.getFullYear() + " "+ d.toLocaleTimeString() + ", Positivity = "+y);
             }
         }
         else {
@@ -150,6 +155,14 @@ if(sentiment < 10)  {
             previousPoint = null;            
         }
     });
-</script> 
 
+    $("#placeholder").bind("plotclick", function (event, pos, item) {
+        if (item) {
+            console.log(item);
+            $('html, body').animate({scrollTop: $("#" + item.dataIndex).offset().top}, 2000);
+        }
+    });
+    
+    
+</script> 
 </html>

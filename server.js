@@ -88,6 +88,11 @@ app.get('/', function(req, res){
             var twitter_data = JSON.parse(data);
             var tweet_essay = twitter_data.map(function(elem){ return elem.text.replace(/\n|"|\?|!|\.|;|-|and/g,"");}).join('.  ');
             getClar(tweet_essay, "VERBATIM_AND_SENTENCE", function(error, sentiment_data){
+                if(error) {
+                    console.log(error);
+                    res.send("SOMETHING WENT WRONG");
+                    return;
+                }
                 console.log(JSON.stringify(sentiment_data,null,1));
                 var s = getSentiment(sentiment_data);
                 s = (parseFloat(s[0]) + 2)*25;

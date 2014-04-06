@@ -89,12 +89,16 @@ if(sentiment < 10)  {
     });
     var data = [tweet_series];
     var options = {
-        grid: { hoverable: true, 
+        grid: { 
+            hoverable: true, 
             clickable: true 
-            },
+        },
+        colors: ["#d08261"],
         xaxis: {  mode: "time"},
-        series: { lines: { show: true, fillColor:"#d08261" },
-                  points: { show: true }}
+        series: { 
+            lines: { show: true },
+            points: { show: true }
+        }
     };
     $.plot($("#placeholder"), data, options);
     $("#placeholder").bind("plotclick", function (event, pos, item) {

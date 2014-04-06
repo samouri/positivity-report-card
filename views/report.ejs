@@ -17,13 +17,12 @@
 
 <% twitter_data.forEach(function(elem) { %>
         <p> tweet: <%= elem.text %> </p>
-<% }); %>
+        <% }); %>
 </body>
 </center>
-<footer>
+
 <script> 
     var d = <%- JSON.stringify(twitter_data) %> 
 </script> 
 
-</footer>
 </html>

@@ -13,19 +13,19 @@ var app = express(), server = require('http').createServer(app);
 
 // configure Express
 app.configure(function() {
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'ejs');
+    app.use(express.logger());
+    app.use(express.cookieParser());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.session({ secret: 'keyboard cat' }));
+    app.use(app.router);
+    app.use(express.static(__dirname + '/public'));
 });
 
 var getSentiment = function getSentiment(json) {
-       return json["S:Envelope"]["S:Body"][0]['ns2:processMultiVerbatimDocumentResponse'][0].return[0].degreeSentiment;
+    return json["S:Envelope"]["S:Body"][0]['ns2:processMultiVerbatimDocumentResponse'][0].return[0].degreeSentiment;
 }
 
 var getClar = function getClar(text, verbatimLevel, callback) {
@@ -66,7 +66,7 @@ var getTweets = function getTweets(handle, callback) {
         var headers2 = {'Authorization': 'Bearer ' + JSON.parse(body).access_token}; 
         var options2 = {
             uri: uri2,
-            headers: headers2
+    headers: headers2
         } 
         request.get(options2, function(error2, response2, body2) {
             callback(error2, body2);
@@ -80,16 +80,21 @@ app.get('/', function(req, res){
     var params = {};
     var handle = req.param('handle');
     if(handle) {
-    getTweets(handle, function(err, data){
-        var twitter_data = JSON.parse(data);
-        console.log(data);
-        var tweet_essay = twitter_data.map(function(elem){ return elem.text;}).join('.  ');
-        getClar(tweet_essay, "VERBATIM", function(error, sentiment_data){
-            var s = getSentiment(sentiment_data);
-            console.log(handle, "sentiment: ", s);
-            res.render('report', {sentiment: s, text:"", data:"", twitter_data: JSON.parse(data), tweeter:handle}); 
+        getTweets(handle, function(err, data){
+            console.log(Object.prototype.toString.call( JSON.parse(data) ) === '[object Array]');
+            if(! (Object.prototype.toString.call( JSON.parse(data) ) === '[object Array]')) {
+                handle = "HANDLE DOES NOT EXIST"
+                res.render('report', {sentiment: "DOES NOT EXIST", text:"", data:"", twitter_data: [], tweeter:handle}); 
+                return;
+            }
+            var twitter_data = JSON.parse(data);
+            var tweet_essay = twitter_data.map(function(elem){ return elem.text;}).join('.  ');
+            getClar(tweet_essay, "VERBATIM", function(error, sentiment_data){
+                var s = getSentiment(sentiment_data);
+                console.log(handle, "sentiment: ", s);
+                res.render('report', {sentiment: s, text:"", data:"", twitter_data: JSON.parse(data), tweeter:handle}); 
+            });
         });
-    });
     }
     else {
         res.render('report', {sentiment: "", text:"", data:"", twitter_data: [], tweeter:""});

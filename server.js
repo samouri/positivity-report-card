@@ -63,7 +63,7 @@ var getTweets = function getTweets(handle, callback) {
         body: "grant_type=client_credentials"
     }
     request.post(options, function (error, response, body) {
-        var uri2 = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + handle + "&include_rts=falsei&count=3000";
+        var uri2 = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + handle + "&include_rts=falsei&count=100";
         var headers2 = {'Authorization': 'Bearer ' + JSON.parse(body).access_token}; 
         var options2 = {
             uri: uri2,
@@ -91,9 +91,9 @@ app.get('/', function(req, res){
             getClar(tweet_essay, "VERBATIM_AND_SENTENCE", function(error, sentiment_data){
                 console.log(JSON.stringify(sentiment_data,null,1));
                 var s = getSentiment(sentiment_data);
-                var sentences = getSentences(sentiment_data).map(function(elem, i){elem.date=twitter_data[i].created_at; return elem;});
                 s = (parseFloat(s[0]) + 2)*25;
 		        s = Math.ceil(Math.max(0, Math.min(100,s)));
+                var sentences = getSentences(sentiment_data).map(function(elem, i){elem.date=Date.parse(twitter_data[i].created_at); return elem;});
                 res.render('report', {sentiment: s, text:"", data:sentences, twitter_data: JSON.parse(data), tweeter:handle}); 
             });
         });

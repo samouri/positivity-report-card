@@ -46,7 +46,11 @@ var getClar = function getClar(text, verbatimLevel, callback) {
         body: data
     }
     request.post(options, function (error, response, body) {
-        parseString(body, function(err,results) { callback(err, results); });
+        if(error) { console.log(error);}
+        parseString(body, function(err,results) { 
+            if(err) { console.log(err, body);}
+            callback(err, results); 
+        });
     });
 }
 
@@ -62,7 +66,7 @@ var getTweets = function getTweets(handle, callback) {
         body: "grant_type=client_credentials"
     }
     request.post(options, function (error, response, body) {
-        var uri2 = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + handle + "&include_rts=falsei&count=100";
+        var uri2 = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + handle + "&include_rts=falsei&count=75";
         var headers2 = {'Authorization': 'Bearer ' + JSON.parse(body).access_token}; 
         var options2 = {
             uri: uri2,

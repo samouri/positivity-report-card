@@ -56,6 +56,7 @@ p.info {
   overflow: hidden;
   padding: 10px 0;
   text-align: left;
+  color: #3c3940;
 }
 
 p.logo {
@@ -84,7 +85,6 @@ p.score {
 p.explanation {
   vertical-align: middle;
   font-size: 120%;
-  color: #3c3940;
 }
 
 p.tweet {

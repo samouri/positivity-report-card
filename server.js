@@ -87,7 +87,7 @@ app.get('/', function(req, res){
                 return;
             }
             var twitter_data = JSON.parse(data);
-            var tweet_essay = twitter_data.map(function(elem){ return elem.text.replace(/\?|!|\.|;|-|and/g,"");}).join('.  ');
+            var tweet_essay = twitter_data.map(function(elem){ return elem.text.replace(/\n|"|\?|!|\.|;|-|and/g,"");}).join('.  ');
             getClar(tweet_essay, "VERBATIM_AND_SENTENCE", function(error, sentiment_data){
                 console.log(JSON.stringify(sentiment_data,null,1));
                 var s = getSentiment(sentiment_data);

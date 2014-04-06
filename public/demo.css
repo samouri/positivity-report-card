@@ -56,7 +56,6 @@ p.info {
   overflow: hidden;
   padding: 10px 0;
   text-align: left;
-  color: #3c3940;
 }
 
 p.logo {
@@ -86,6 +85,11 @@ p.explanation {
   vertical-align: middle;
   font-size: 120%;
   color: #3c3940;
+}
+
+p.tweet {
+  
+  color: #3c3940; 
 }
 
 img.center {

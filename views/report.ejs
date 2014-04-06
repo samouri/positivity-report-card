@@ -71,7 +71,7 @@ if(sentiment < 10)  {
 </div>
 <div id="placeholder" style="width:600px;height:300px"> </div>
 <% twitter_data.forEach(function(elem,i) { %>
-    <p id="<%=i%>"> tweet: <%= elem.text %> </p>
+    <p id="<%=i%>" class="tweet"> tweet: <%= elem.text %> </p>
         <% }); %>
 </body>
 </center>

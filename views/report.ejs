@@ -32,15 +32,37 @@
 <div class="grid_12">
 <p class="score"><%= tweeter %>'s positivity number is <span class="number"><%= sentiment %></span></p>
 </div>
+<div class="clear"></div>
+<div class="grid_12">
+<% 
+var output = "";
+if(sentiment < 10)  {
+	output = tweeter + ' is extremely negative. They should work on that.';
+} else if(sentiment < 20) {
+        output = tweeter + ' is very negative. That\'s bad.';
+} else if(sentiment < 30) {
+        output = tweeter + ' is pretty negative. If they worked at it, they could definitely improve.';
+} else if(sentiment < 40) {
+        output = tweeter + ' is more negative than most. Or they just vent their frustrations on social media';
+} else if(sentiment < 49) {
+        output = tweeter + ' is a little more negative than average. Nothing to be alarmed at.';
+} else if(sentiment < 51) {
+        output = tweeter + ' is average. Run of the mill. Not positive or negative. Probably has no feelings at all.';
+} else if(sentiment < 60) {
+        output = tweeter + ' is a little more positive than the average. Good for them!';
+} else if(sentiment < 70) {
+        output = tweeter + ' is a positive polly.';
+} else if(sentiment < 80) {
+        output = tweeter + ' is really really positive.';
+} else if(sentiment < 90) {
+        output = tweeter + ' is maybe too positive';
+} else {
+        output = tweeter + ' is impossibly positive';
+} %>
 
-<!--<form method="get">
-    Text <input type="textarea" autofocus="true" name="handle"/>
-</form>
+<p class="explanation"> <%= output %></p>
 
-<% twitter_data.forEach(function(elem) { %>
-        <p> tweet: <%= elem.text %> </p>
-        <% }); %>
--->
+</div>
 </div>
 </body>
 </center>

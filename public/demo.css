@@ -82,6 +82,12 @@ p.score {
   font-size: 200%;
 }
 
+p.explanation {
+  vertical-align: middle;
+  font-size: 120%;
+  color: #3c3940;
+}
+
 img.center {
     display: block;
     margin-left: auto;
@@ -89,7 +95,8 @@ img.center {
 }
 
 .number {
-  font-size: 200%;
+  font-size: 120%;
+  font-weight:underline; 
 }
 
 .labels {

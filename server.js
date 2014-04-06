@@ -73,9 +73,7 @@ var getTweets = function getTweets(handle, callback) {
             callback(error2, body2);
         });
     });
-}
-
-
+} 
 
 app.get('/', function(req, res){
     var params = {};
@@ -94,8 +92,8 @@ app.get('/', function(req, res){
                 console.log(JSON.stringify(sentiment_data,null,1));
                 var s = getSentiment(sentiment_data);
                 var sentences = getSentences(sentiment_data).map(function(elem, i){elem.date=twitter_data[i].created_at; return elem;});
-                console.log(handle, "sentiment: ", s);
-                console.log("Sentences:   ", sentences);
+                s = (parseFloat(s[0]) + 2)*25;
+		        s = Math.ceil(Math.max(0, Math.min(100,s)));
                 res.render('report', {sentiment: s, text:"", data:sentences, twitter_data: JSON.parse(data), tweeter:handle}); 
             });
         });

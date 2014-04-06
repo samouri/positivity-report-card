@@ -25,6 +25,10 @@ var getSentiment = function getSentiment(json) {
     return json["S:Envelope"]["S:Body"][0]['ns2:processMultiVerbatimDocumentResponse'][0].return[0].degreeSentiment;
 }
 
+var getSentences = function getSentences(json) {
+    return json["S:Envelope"]["S:Body"][0]["ns2:processMultiVerbatimDocumentResponse"][0].return[0].verbatimSet[0].verbatim[0].sentences[0].sentence.map(function(elem){return {text:elem.text, sentiment: elem.degreeSentiment }});
+}
+
 var getClar = function getClar(text, verbatimLevel, callback) {
     var uri = "https://cilantro.clarabridge.com/cbapi/realtime";
     var verbatim = text;
@@ -85,12 +89,14 @@ app.get('/', function(req, res){
                 return;
             }
             var twitter_data = JSON.parse(data);
-            var tweet_essay = twitter_data.map(function(elem){ return elem.text;}).join('.  ');
-            getClar(tweet_essay, "FULL", function(error, sentiment_data){
+            var tweet_essay = twitter_data.map(function(elem){ return elem.text.replace(/\?|!|\.|;|-|and/g,"");}).join('.  ');
+            getClar(tweet_essay, "VERBATIM_AND_SENTENCE", function(error, sentiment_data){
                 console.log(JSON.stringify(sentiment_data,null,1));
                 var s = getSentiment(sentiment_data);
+                var sentences = getSentences(sentiment_data).map(function(elem, i){elem.date=twitter_data[i].created_at; return elem;});
                 console.log(handle, "sentiment: ", s);
-                res.render('report', {sentiment: s, text:"", data:"", twitter_data: JSON.parse(data), tweeter:handle}); 
+                console.log("Sentences:   ", sentences);
+                res.render('report', {sentiment: s, text:"", data:sentences, twitter_data: JSON.parse(data), tweeter:handle}); 
             });
         });
     }

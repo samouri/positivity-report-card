@@ -93,7 +93,7 @@ app.get('/', function(req, res){
                 s = (parseFloat(s[0]) + 2)*25;
 		        s = Math.ceil(Math.max(0, Math.min(100,s)));
                 var sentences = getSentences(sentiment_data).map(function(elem, i){elem.date=Date.parse(twitter_data[i].created_at); return elem;});
-                res.render('report', {sentiment: s, text:"", data:sentences, twitter_data: JSON.parse(data), tweeter:handle}); 
+                res.render('report', {sentiment: s, text:"", data:sentences, twitter_data: twitter_data, tweeter:handle}); 
             });
         });
     }

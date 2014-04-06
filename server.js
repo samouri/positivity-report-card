@@ -84,7 +84,7 @@ app.get('/', function(req, res){
             console.log(Object.prototype.toString.call( JSON.parse(data) ) === '[object Array]');
             if(! (Object.prototype.toString.call( JSON.parse(data) ) === '[object Array]')) {
                 handle = "HANDLE DOES NOT EXIST"
-                res.render('report', {sentiment: "DOES NOT EXIST", text:"", data:"", twitter_data: [], tweeter:handle}); 
+                res.render('index', {sentiment: "DOES NOT EXIST", text:"", data:"", twitter_data: [], tweeter:handle}); 
                 return;
             }
             var twitter_data = JSON.parse(data);
@@ -97,7 +97,7 @@ app.get('/', function(req, res){
         });
     }
     else {
-        res.render('report', {sentiment: "", text:"", data:"", twitter_data: [], tweeter:""});
+        res.render('index', {sentiment: "", text:"", data:"", twitter_data: [], tweeter:""});
     }
 });
 

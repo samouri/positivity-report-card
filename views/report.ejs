@@ -72,13 +72,20 @@ if(sentiment < 10)  {
 } %>
 
 <p class="explanation"> <%= output %></p>
+</div>
 
+<div class="clear"></div>
+<div class="grid_12">
+<div id="placeholder" style="width:700px;height:250px"> </div>
 </div>
-</div>
-<div id="placeholder" style="width:700px; height:250px"> </div>
+
+<div class="clear"></div>
+<div class="grid_12">
 <% twitter_data.forEach(function(elem,i) { %>
     <p id="<%=i%>" class="tweet"> tweet: <%= elem.text %> </p>
         <% }); %>
+</div>
+</div>
 </body>
 </center>
 

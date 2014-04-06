@@ -77,10 +77,19 @@ p.input {
     margin: auto 0;
 }
 
+p.score {
+  vertical-align: middle;
+  font-size: 200%;
+}
+
 img.center {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.number {
+  font-size: 350%;
 }
 
 .labels {

@@ -1,7 +1,4 @@
 var express = require('express');
-var util = require('util');
-var Twit = require('twit');
-var async = require("async");
 var request = require('request');
 var parseString = require('xml2js').parseString;
 
@@ -89,7 +86,8 @@ app.get('/', function(req, res){
             }
             var twitter_data = JSON.parse(data);
             var tweet_essay = twitter_data.map(function(elem){ return elem.text;}).join('.  ');
-            getClar(tweet_essay, "VERBATIM", function(error, sentiment_data){
+            getClar(tweet_essay, "FULL", function(error, sentiment_data){
+                console.log(JSON.stringify(sentiment_data,null,1));
                 var s = getSentiment(sentiment_data);
                 console.log(handle, "sentiment: ", s);
                 res.render('report', {sentiment: s, text:"", data:"", twitter_data: JSON.parse(data), tweeter:handle}); 

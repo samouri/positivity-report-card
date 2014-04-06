@@ -45,7 +45,6 @@ var getClar = function getClar(text, verbatimLevel, callback) {
         headers: headers,
         body: data
     }
-
     request.post(options, function (error, response, body) {
         parseString(body, function(err,results) { callback(err, results); });
     });
